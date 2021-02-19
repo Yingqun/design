@@ -10,3 +10,9 @@ var obj2 = {
 
 console.log(obj1.getName())
 console.log(obj1.getName.call(obj2))
+
+//第一个参数为空的时候
+var func = function(a, b, c) {
+  console.log(this === window)
+}
+func.apply(null, [1, 2, 3])
