@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+    //一次性往页面中创建成百上千个节点的性能优化
+//解决方案 让创建节点的工作分批进行，比如把1秒钟创建1000个节点，改为每隔200毫秒创建8个节点。
+// 第1个参数是创建节点时需要用到的数据
+// 第2个参数是封装了创建节点逻辑的函数
+// 第3个参数表示每一批创建的节点数量
+var timeChunk = function (ary, fn, count) {
+    var obj, t;
+    var len = arr.length;
+    var start = function () {
+        for(var i = 0; i < Math.min(count || 1, ary.length); i++) {
+            var obj = ary.shift();
+            fn(obj)
+        }
+    }
+    return function () {
+        t = setInterval(() => {
+            if(ary.length === 0) { //如果全部节点都已创建好
+                return clearInterval(t)
+            }
+            start();
+        }, 200); //分批时间间隔，可以用参数传入
+    }
+}
+
+var ary = [];
+for(var i = 1; i <= 1000; i++) {
+    ary.push(i)
+}
+var renderFriendList = timeChunk(ary, function (n) {
+    var div = document.createElement('div');
+    div.innerHTML = n;
+    document.body.appendChild(div)
+}, 8)
+renderFriendList();
+
+
+</script>
+</html>
+
