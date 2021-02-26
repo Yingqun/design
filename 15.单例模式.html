@@ -10,6 +10,7 @@
 <body>
     <div id="loginBtn">窗口按钮</div>
     <div id="iframeBtn">iframe按钮</div>
+    <div id="div1">绑定事件</div>
 </body>
 <script>
     //<!-- 通用的惰性单利 -->
@@ -19,7 +20,7 @@
             return result || (result = fn.apply(this, arguments))
         }
     }
-    //创建登陆窗口
+    // 创建登陆窗口
     var createLoginLayer = function() {
         var div = document.createElement('div');
         div.innerHTML = '我是登陆浮窗';
@@ -28,7 +29,11 @@
         return div
     }
     var createSingleLoginLayer = getSingle(createLoginLayer)
-    //创建iframe
+    document.getElementById('loginBtn').onclick = function() {
+        var loginLayer = createSingleLoginLayer();
+        loginLayer.style.display = 'block'
+    }
+    // 创建iframe
     var createSingleIframe = getSingle(function () {
         var iframe = document.createElement('iframe');
         document.body.appendChild(iframe);
@@ -38,9 +43,21 @@
         var iframeLayer = createSingleIframe();
         iframeLayer.src = 'http://baidu.com';
     }
-    document.getElementById('loginBtn').onclick = function() {
-        var loginLayer = createSingleLoginLayer();
-        loginLayer.style.display = 'block'
+    // 绑定事件
+    var bindEvent = getSingle(function() {
+        document.getElementById('div1').onclick = function() {
+            alert('click');
+        }
+        return true;
+    })
+    // render函数和bindEvent函数都分别执行了3次，但div实际上只被绑定了一个事件
+    var render = function() {
+        console.log('开始渲染列表')
+        bindEvent();
     }
+    render();
+    render();
+    render();
+   
 </script>
 </html>
