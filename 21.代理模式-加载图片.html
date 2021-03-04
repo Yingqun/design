@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 单一职责原则指的是，就一个类（通常也包括对象和函数等）而言，应该仅有一个引起它变化的原因 -->
+</body>
+<script>
+    var myImage = (
+        function(){
+            var imgNode = document.createElement('img')
+            document.body.appendChild(imgNode)
+            return {
+                setSrc: function(src) {
+                    imgNode.src = src;
+                }
+            }
+        }
+    )();
+    // <!-- 代理负责预加载图片，预加载的操作完成之后，把请求重新交给本体MyImage -->
+    var proxyImage = (function(){
+        var img = new Image;
+        img.onload = function() {
+            myImage.setSrc(this.src)
+        }
+        return {
+            setSrc: function(src) {
+                // 真正的图片加载好之前, 先把img节点的src设置为一张本地的loading图片
+                myImage.setSrc('https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3247616596,1186169219&fm=26&gp=0.jpg')
+                img.src = src
+            }
+        }
+    })();
+    proxyImage.setSrc('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic4.zhimg.com%2Fv2-9f10e9b2c9a2847be2434bbc296f50bb_1200x500.jpg&refer=http%3A%2F%2Fpic4.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617441939&t=33f99bdc056aaa627b91c932df3a9414')
+</script>
+</html>
