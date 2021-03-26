@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="button1">点我按钮1</button>
+  <button id="button2">点我按钮2</button>
+  <button id="button3">点我按钮3</button>
+</body>
+
+<script>
+  var btn1 = document.getElementById('button1')
+  var btn2 = document.getElementById('button1')
+  var btn3 = document.getElementById('button1')
+
+  var setCommand = function (button, command) {
+    button.onclick = function () {
+      command.execute();
+    }
+  }
+
+  var MenuBar = {
+    refresh: function () {
+      console.log('刷新菜单')
+    }
+  }
+
+  var SubMenu = {
+    add: function () {
+      console.log('增加子菜单')
+    },
+    del: function () {
+      console.log('删除子菜单')
+    }
+  }
+
+  //命令类
+  var RefreshMenuBarCommand = function (receiver) {
+    this.receiver = receiver
+  }
+  RefreshMenuBarCommand.prototype.execute = function () {
+    this.receiver.refresh()
+  }
+  var AddSubMenuCommand = function (receiver) {
+    this.receiver = receiver;
+  }
+  AddSubMenuCommand.prototype.execute = function () {
+    this.receiver.add();
+  }
+
+  var DelSubMenuCommand = function (receiver) {
+    this.receiver = receiver
+  }
+  DelSubMenuCommand.prototype.execute = function () {
+    console.log('删除子菜单')
+  }
+
+  //最后就是把命令接收者传入到command对象中
+  // 并且把command对象安装到button上面
+
+  var refreshMenuBarCommand = new RefreshMenuBarCommand(MenuBar)
+  setCommand(button1, refreshMenuBarCommand)
+
+  var addSubMenuCommand = new AddSubMenuCommand(SubMenu);
+  setCommand(button2, addSubMenuCommand)
+
+  var delSubMenuCommand = new DelSubMenuCommand(SubMenu);
+  setCommand(button3, delSubMenuCommand)
+
+
+</script>
+
+</html>
